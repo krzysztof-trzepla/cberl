@@ -110,6 +110,35 @@ Connection::Connection(const ConnectRequest &request)
     lcb_set_http_complete_callback(m_instance, httpCallback);
     lcb_set_durability_callback(m_instance, durabilityCallback);
 
+    std::string optName;
+    int optValue;
+    for (const auto &option : request.options()) {
+        std::tie(optName, optValue) = option;
+        if (optName == "operation_timeout") {
+            err = lcb_cntl(
+                m_instance, LCB_CNTL_SET, LCB_CNTL_OP_TIMEOUT, &optValue);
+        }
+        else if (optName == "config_total_timeout") {
+            err = lcb_cntl(m_instance, LCB_CNTL_SET,
+                LCB_CNTL_CONFIGURATION_TIMEOUT, &optValue);
+        }
+        else if (optName == "view_timeout") {
+            err = lcb_cntl(
+                m_instance, LCB_CNTL_SET, LCB_CNTL_VIEW_TIMEOUT, &optValue);
+        }
+        else if (optName == "durability_timeout") {
+            err = lcb_cntl(m_instance, LCB_CNTL_SET,
+                LCB_CNTL_DURABILITY_TIMEOUT, &optValue);
+        }
+        else if (optName == "http_timeout") {
+            err = lcb_cntl(
+                m_instance, LCB_CNTL_SET, LCB_CNTL_HTTP_TIMEOUT, &optValue);
+        }
+        if (err != LCB_SUCCESS) {
+            throw err;
+        }
+    }
+
     err = lcb_connect(m_instance);
     if (err != LCB_SUCCESS) {
         throw err;

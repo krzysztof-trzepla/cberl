@@ -14,7 +14,7 @@
 -on_load(init/0).
 
 %% API
--export([new/0, connect/6, get/4, store/4, remove/4, arithmetic/4, http/4,
+-export([new/0, connect/7, get/4, store/4, remove/4, arithmetic/4, http/4,
     durability/5]).
 
 -type client() :: term().
@@ -75,8 +75,8 @@ new() ->
 %% @end
 %%--------------------------------------------------------------------
 -spec connect(pid(), client(), cberl:host(), cberl:username(), cberl:password(),
-    cberl:bucket()) -> {ok, request_id()} | no_return().
-connect(_From, _Client, _Host, _Username, _Password, _Bucket) ->
+    cberl:bucket(), [cberl:connect_opt()]) -> {ok, request_id()} | no_return().
+connect(_From, _Client, _Host, _Username, _Password, _Bucket, _Opts) ->
     erlang:nif_error(cberl_nif_not_loaded).
 
 %%--------------------------------------------------------------------

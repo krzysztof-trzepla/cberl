@@ -28,7 +28,7 @@ Add `cberl` as a `rebar` dependency to your project:
 Now you can use `cberl` as follows:
 
 ```erlang
-{ok, C} = cberl:connect(<<"127.0.0.1">>, <<>>, <<>>, <<"default">>, 1000).
+{ok, C} = cberl:connect(<<"127.0.0.1">>, <<>>, <<>>, <<"default">>, [], 1000).
 
 % Store binary data
 cberl:store(C, set, <<"k1">>, <<"v1">>, none, 0, 0, 1000).

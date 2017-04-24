@@ -85,7 +85,9 @@ static ERL_NIF_TERM connect_nif(
         cb::ConnectRequest request{nifpp::get<std::string>(env, argv[2]),
             nifpp::get<std::string>(env, argv[3]),
             nifpp::get<std::string>(env, argv[4]),
-            nifpp::get<std::string>(env, argv[5])};
+            nifpp::get<std::string>(env, argv[5]),
+            nifpp::get<std::vector<std::tuple<nifpp::str_atom, int>>>(
+                env, argv[6])};
 
         client->connect(
             std::move(request), [ctx](const cb::ConnectResponse &response) {
@@ -246,7 +248,7 @@ static ERL_NIF_TERM durability_nif(
 }
 
 static ErlNifFunc nif_funcs[] = {{"new", 0, new_nif},
-    {"connect", 6, connect_nif}, {"get", 4, get_nif}, {"store", 4, store_nif},
+    {"connect", 7, connect_nif}, {"get", 4, get_nif}, {"store", 4, store_nif},
     {"remove", 4, remove_nif}, {"arithmetic", 4, arithmetic_nif},
     {"http", 4, http_nif}, {"durability", 5, durability_nif}};
 

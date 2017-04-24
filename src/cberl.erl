@@ -14,7 +14,7 @@
 -behaviour(gen_server).
 
 %% API
--export([connect/5, get/5, bulk_get/3, store/8, bulk_store/3, remove/4,
+-export([connect/6, get/5, bulk_get/3, store/8, bulk_store/3, remove/4,
     bulk_remove/3, arithmetic/6, bulk_arithmetic/3, http/7, durability/6,
     bulk_durability/4]).
 
@@ -27,6 +27,11 @@
 -type username() :: binary().
 -type password() :: binary().
 -type bucket() :: binary().
+-type connect_opt() :: {operation_timeout, pos_integer()} |
+                       {config_total_timeout, pos_integer()} |
+                       {view_timeout, pos_integer()} |
+                       {durability_timeout, pos_integer()} |
+                       {http_timeout, pos_integer()}.
 -type key() :: binary().
 -type value() :: binary() | jiffy:json_value() | term().
 -type encoder() :: none | json | raw.
@@ -44,7 +49,8 @@
 -type persist_to() :: -1 | non_neg_integer().
 -type replicate_to() :: -1 | non_neg_integer().
 
--export_type([connection/0, host/0, username/0, password/0, bucket/0]).
+-export_type([connection/0, host/0, username/0, password/0, bucket/0,
+    connect_opt/0]).
 -export_type([key/0, value/0, encoder/0, cas/0, expiry/0]).
 -export_type([store_operation/0]).
 -export_type([arithmetic_delta/0, arithmetic_default/0]).
@@ -89,11 +95,11 @@
 %% Creates connection to a CouchBase database.
 %% @end
 %%--------------------------------------------------------------------
--spec connect(host(), username(), password(), bucket(), timeout()) ->
-    {ok, connection()} | no_return().
-connect(Host, Username, Password, Bucket, Timeout) ->
+-spec connect(host(), username(), password(), bucket(), [connect_opt()],
+    timeout()) -> {ok, connection()} | no_return().
+connect(Host, Username, Password, Bucket, Opts, Timeout) ->
     gen_server:start_link(?MODULE, [
-        Host, Username, Password, Bucket, Timeout
+        Host, Username, Password, Bucket, Opts, Timeout
     ], []).
 
 %%--------------------------------------------------------------------
@@ -273,10 +279,10 @@ bulk_durability(Connection, Requests, Options, Timeout) ->
 -spec init(Args :: term()) ->
     {ok, State :: state()} | {ok, State :: state(), timeout() | hibernate} |
     {stop, Reason :: term()} | ignore.
-init([Host, Username, Password, Bucket, Timeout]) ->
+init([Host, Username, Password, Bucket, Opts, Timeout]) ->
     {ok, Client} = cberl_nif:new(),
     {ok, Ref} = cberl_nif:connect(
-        self(), Client, Host, Username, Password, Bucket
+        self(), Client, Host, Username, Password, Bucket, Opts
     ),
     receive
         {Ref, {ok, Connection}} ->
@@ -377,7 +383,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% @end
 %%--------------------------------------------------------------------
 -spec call(connection(), {Function :: atom(), Args :: list()}, timeout()) ->
-    cberl_nif:response() | {error, Reason :: term()} .
+    cberl_nif:response() | {error, Reason :: term()}.
 call(Connection, Request, Timeout) ->
     Ref = make_ref(),
     gen_server:cast(Connection, {request, Ref, self(), Request}),

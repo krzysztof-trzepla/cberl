@@ -16,3 +16,7 @@ clean:
 .PHONY: dialyzer
 dialyzer:
 	./rebar3 dialyzer
+
+.PHONY: test
+test:
+	./rebar3 ct

@@ -8,17 +8,21 @@
 #ifndef CBERL_CONNECT_REQUEST_H
 #define CBERL_CONNECT_REQUEST_H
 
+#include "nifpp.h"
+
 #include <libcouchbase/couchbase.h>
 
 #include <string>
 #include <tuple>
+#include <vector>
 
 namespace cb {
 
 class ConnectRequest {
 public:
     ConnectRequest(std::string host, std::string username, std::string password,
-        std::string bucket);
+        std::string bucket,
+        std::vector<std::tuple<nifpp::str_atom, int>> options);
 
     const std::string &host() const;
 
@@ -28,11 +32,14 @@ public:
 
     const std::string &bucket() const;
 
+    const std::vector<std::tuple<nifpp::str_atom, int>> &options() const;
+
 private:
     std::string m_host;
     std::string m_username;
     std::string m_password;
     std::string m_bucket;
+    std::vector<std::tuple<nifpp::str_atom, int>> m_options;
 };
 
 } // namespace cb

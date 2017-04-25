@@ -21,7 +21,7 @@ Add `cberl` as a `rebar` dependency to your project:
 
 ```erlang
 {deps, [
-  {cberl, "1.0.0", {git, "https://github.com/krzysztof-trzepla/cberl.git", {tag, "1.0.0"}}}
+  {cberl, "1.0.1", {git, "https://github.com/krzysztof-trzepla/cberl.git", {tag, "1.0.1"}}}
 }.
 ```
 
@@ -100,7 +100,7 @@ cberl:bulk_arithmetic(C, [
 
 % Perform HTTP request
 Path = <<"_design/dev_example/_view/all_docs">>.
-cberl:http(C2, view, get, Path, <<>>, <<>>, 1000).
+cberl:http(C, view, get, Path, <<>>, <<>>, 1000).
 % {ok, 200, <<"{
 %   \"total_rows\": 2,
 %   \"rows\": [\r\n
@@ -114,7 +114,7 @@ cberl:durability(C, <<"k4">>, 0, 1, -1, 1000).
 % {ok, 1492167125759885312}
 
 % Perform bulk durability check operation
-cberl:bulk_durability(C2, [
+cberl:bulk_durability(C, [
     {<<"k4">>, 0},
     {<<"k5">>, 0}
 ], {1, -1}, 1000).

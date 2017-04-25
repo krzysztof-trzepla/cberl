@@ -27,11 +27,11 @@
 -type username() :: binary().
 -type password() :: binary().
 -type bucket() :: binary().
--type connect_opt() :: {operation_timeout, pos_integer()} |
-                       {config_total_timeout, pos_integer()} |
-                       {view_timeout, pos_integer()} |
-                       {durability_timeout, pos_integer()} |
-                       {http_timeout, pos_integer()}.
+-type connect_opt() :: {operation_timeout, pos_integer()} | % in microseconds
+                       {config_total_timeout, pos_integer()} | % in microseconds
+                       {view_timeout, pos_integer()} | % in microseconds
+                       {durability_timeout, pos_integer()} | % in microseconds
+                       {http_timeout, pos_integer()}. % in microseconds
 -type key() :: binary().
 -type value() :: binary() | jiffy:json_value() | term().
 -type encoder() :: none | json | raw.

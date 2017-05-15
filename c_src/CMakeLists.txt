@@ -40,11 +40,8 @@ add_subdirectory(src)
 
 add_library(cberl SHARED ${PROJECT_SOURCES})
 target_link_libraries(cberl PRIVATE ${CBERL_LIBRARIES})
-target_include_directories(cberl SYSTEM PRIVATE
-    ${ERLANG_ERTS_INCLUDE_PATH}
-    ${CBERL_SYSTEM_INCLUDE_DIRS})
-target_include_directories(cberl PRIVATE
-    ${CBERL_INCLUDE_DIRS})
+target_include_directories(cberl SYSTEM PRIVATE ${CBERL_SYSTEM_INCLUDE_DIRS})
+target_include_directories(cberl PRIVATE ${CBERL_INCLUDE_DIRS})
 set_target_properties(cberl PROPERTIES SUFFIX .so)
 
 install(TARGETS cberl DESTINATION .)

@@ -30,6 +30,7 @@
 -type connect_opt() :: {operation_timeout, pos_integer()} | % in microseconds
                        {config_total_timeout, pos_integer()} | % in microseconds
                        {view_timeout, pos_integer()} | % in microseconds
+                       {durability_interval, pos_integer()} | % in microseconds
                        {durability_timeout, pos_integer()} | % in microseconds
                        {http_timeout, pos_integer()}. % in microseconds
 -type key() :: binary().

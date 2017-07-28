@@ -130,6 +130,10 @@ Connection::Connection(const ConnectRequest &request)
             err = lcb_cntl(m_instance, LCB_CNTL_SET,
                 LCB_CNTL_DURABILITY_TIMEOUT, &optValue);
         }
+        else if (optName == "durability_interval") {
+            err = lcb_cntl(m_instance, LCB_CNTL_SET,
+                LCB_CNTL_DURABILITY_INTERVAL, &optValue);
+        }
         else if (optName == "http_timeout") {
             err = lcb_cntl(
                 m_instance, LCB_CNTL_SET, LCB_CNTL_HTTP_TIMEOUT, &optValue);

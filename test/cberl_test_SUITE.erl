@@ -197,6 +197,7 @@ init_per_testcase(_Case, Config) ->
         {operation_timeout, 5000000},
         {config_total_timeout, 5000000},
         {view_timeout, 60000000},
+        {durability_interval, 10000},
         {durability_timeout, 30000000},
         {http_timeout, 10000000}
     ],
